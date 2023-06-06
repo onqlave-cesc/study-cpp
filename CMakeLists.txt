@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.14...3.22)
 
 # Note: update this to your new project's name and version
 project(
-  CppSDK
+  OnqlaveCppSDK
   VERSION 0.0.1
   LANGUAGES CXX
 )
@@ -33,6 +33,23 @@ CPMAddPackage(
   OPTIONS "FMT_INSTALL YES" # create an installable target
 )
 
+#========== Add dependency =================
+CPMAddPackage("gh:jedisct1/libsodium#1.0.18")
+
+CPMAddPackage(
+        NAME openssl-cmake
+        GITHUB_REPOSITORY janbar/openssl-cmake
+        GIT_TAG master
+        OPTIONS
+        "WITH_APPS OFF"
+)
+if (openssl-cmake_ADDED)
+    set(OPENSSL_INCLUDE_DIR "${openssl-cmake_BINARY_DIR}/include")
+    target_include_directories(ssl INTERFACE ${OPENSSL_INCLUDE_DIR})
+    target_include_directories(crypto INTERFACE ${OPENSSL_INCLUDE_DIR})
+endif()
+CPMAddPackage("gh:curl/curl#curl-8_1_2")
+
 # ---- Add source files ----
 
 # Note: globbing sources is considered bad practice as CMake's generators may not detect new files
@@ -51,7 +68,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 11)
 target_compile_options(${PROJECT_NAME} PUBLIC "$<$<COMPILE_LANG_AND_ID:CXX,MSVC>:/permissive->")
 
 # Link dependencies
-target_link_libraries(${PROJECT_NAME} PRIVATE fmt::fmt)
+target_link_libraries(${PROJECT_NAME} PRIVATE fmt::fmt curl:curl)
 
 target_include_directories(
   ${PROJECT_NAME} PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
