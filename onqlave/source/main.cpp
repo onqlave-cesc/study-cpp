@@ -1,13 +1,13 @@
-#include <connection/connection.h>
 #include <connection/client.h>
-#include <fmt/fmt.h>
+#include <connection/connection.h>
+#include <fmt/core.h>
+#include <requests/requests.h>
 
 int main() {
-  Configuration c = Configuration("arx-url", "arx-12345");
-  Client* cl;
-  Hasher* h;
-  connection* conn = new connection(c, cl, h);
+  Configuration config("arx-url", "arx-12345");
 
-  int res = conn->Post("arx", nullptr);
-  fmt::print(res);
+  connection conn(config, new client, new hasher);
+
+  int res = conn.Post("arx", new EncryptionOpenRequest);
+  fmt::print("result: {}\n", res);
 }

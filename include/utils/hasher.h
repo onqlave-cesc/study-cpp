@@ -10,7 +10,7 @@ class Hasher {
   virtual std::string Sign(std::map<std::string, std::string>) = 0;
 };
 
-class hasher : Hasher {
+class hasher : public Hasher {
 public:
   std::string Digest(const OnqlaveRequest& body);
   std::string Sign(std::map<std::string, std::string>);
