@@ -13,3 +13,10 @@ class client : public Client {
   public:
     int Post(std::string resource, const OnqlaveRequest& body, std::map<std::string, std::string> headers);
 };
+
+class RetrySetting {
+public:
+  int Count;
+
+  void Valid();
+};

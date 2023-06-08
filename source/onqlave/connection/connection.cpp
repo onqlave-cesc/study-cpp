@@ -2,6 +2,8 @@
 #include <requests/requests.h>
 #include <fmt/core.h>
 
+using namespace conNs;
+
 int connection::Post(std::string resource, OnqlaveRequest *body) { 
     fmt::print("resource {}\n", resource);
     fmt::print("config arx id {}\n", configuration.ArxID);
