@@ -5,15 +5,15 @@
 
 #include <string>
 
-void credentialOption::apply(keyNs::Configuration c) { c.Cred = &cred; }
+void credentialOption::apply(keyNs::Configuration c) { c.Cred = cred; }
 
-void retryOption::apply(keyNs::Configuration c) { c.Retry = &retry; }
+void retryOption::apply(keyNs::Configuration c) { c.Retry = retry; }
 
 void arxOption::apply(keyNs::Configuration c) { c.ArxURL = arxURL; }
 
 void debugOption::apply(keyNs::Configuration c) { c.Debug = debug; }
 
-Option* WithCredential(Credential c) {
+Option* WithCredential(credNs::Credential c) {
   credentialOption* opt = new credentialOption();
   opt->cred = c;
   return opt;

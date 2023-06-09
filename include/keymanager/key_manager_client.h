@@ -2,6 +2,7 @@
 
 #include <connection/connection.h>
 #include <credential/credential.h>
+#include <keymanager/services/cprng_service.h>
 #include <keymanager/types/types.h>
 
 #include <map>
@@ -13,30 +14,25 @@ const std::string ENCRYPT_RESOURCE_URL = "oe2/keymanager/encrypt";
 const std::string DECRYPT_RESOURCE_URL = "oe2/keymanager/decrypt";
 
 namespace keyNs {
-  class Configuration {
-  public:
-    Credential *Cred;
-    RetrySetting *Retry;
+  struct Configuration {
+    credNs::Credential Cred;
+    RetrySetting Retry;
     std::string ArxURL;
     bool Debug;
-
-    Configuration(Credential *Cred, RetrySetting *Retry, std::string ArxURL);
   };
-}  // namespace keyManager
+}  // namespace keyNs
 
 class KeyManager {
 public:
   virtual std::tuple<std::vector<unsigned char>, std::vector<unsigned char>, std::string>
   FetchEncryptionKey() = 0;
-  virtual std::tuple<std::vector<unsigned char>, std::string> FetchDecryptionKey(
-      std::vector<unsigned char> edk)
-      = 0;
+  virtual std::vector<unsigned char> FetchDecryptionKey(std::vector<unsigned char> edk) = 0;
 };
 
 class keyManager : public KeyManager {
 private:
   Connection *conn;
-  conNs::Configuration config;
+  keyNs::Configuration config;
   std::map<std::string, WrappingKeyOperation> operations;
 
   std::vector<unsigned char> unwrapKey(std::string wrappingAlgorithm, std::string operation,
@@ -46,8 +42,10 @@ private:
                                        std::vector<unsigned char> password);
 
 public:
+  keyManager(keyNs::Configuration config, CPRNGService *randomService);
+
   std::tuple<std::vector<unsigned char>, std::vector<unsigned char>, std::string>
   FetchEncryptionKey();
-  std::tuple<std::vector<unsigned char>, std::string> FetchDecryptionKey(
-      std::vector<unsigned char> edk);
+
+  std::vector<unsigned char> FetchDecryptionKey(std::vector<unsigned char> edk);
 };

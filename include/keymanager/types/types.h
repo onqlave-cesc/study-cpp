@@ -3,16 +3,31 @@
 #include <string>
 #include <vector>
 
-typedef int HashType;
+enum HashType {
+  HashTypeUNKNOWNHASH,
+  HashTypeSHA1,
+  HashTypeSHA384,
+  HashTypeSHA256,
+  HashTypeSHA512,
+  HashTypeSHA224
+};
 
-const HashType HashTypeUNKNOWNHASH = 0;
-const HashType HashTypeSHA1 = 1;
-const HashType HashTypeSHA384 = 2;
-const HashType HashTypeSHA256 = 3;
-const HashType HashTypeSHA512 = 4;
-const HashType HashTypeSHA224 = 5;
+enum KeyMaterialType {
+  KeyMaterialUNKNOWNKEYMATERIAL,
+  KeyMaterialSYMMETRIC,
+  KeyMaterialASYMMETRICPRIVATE,
+  KeyMaterialASYMMETRICPUBLIC,
+  KeyMaterialREMOTE
+};
+
+constexpr const char Aesgcm128[] = "aes-gcm-128";
+constexpr const char Aesgcm256[] = "aes-gcm-256";
+constexpr const char XChacha20poly1305[] = "xcha-cha-20-poly-1305";
+constexpr const char RsaSsapkcs12048sha256f4[] = "RSA_SSA_PKCS1_2048_SHA256_F4";
 
 class Key;
+class KeyID;
+class KeyData;
 class KeyOperation;
 class WrappingKeyFactory;
 
@@ -42,9 +57,10 @@ public:
 class Unwrapping {
 public:
   virtual std::vector<unsigned char> UnwrapKey(std::vector<unsigned char> wdk,
-                                       std::vector<unsigned char> epk,
-                                       std::vector<unsigned char> fp,
-                                       std::vector<unsigned char> byte) = 0;
+                                               std::vector<unsigned char> epk,
+                                               std::vector<unsigned char> fp,
+                                               std::vector<unsigned char> byte)
+      = 0;
 };
 
 class KeyFactory {
@@ -69,4 +85,20 @@ public:
 class WrappingKeyFactory {
 public:
   virtual Unwrapping* Primative(WrappingKeyOperation* operation) = 0;
+};
+
+class KeyData {
+public:
+  virtual std::vector<unsigned char> GetValue() = 0;
+  virtual void FromValue(std::vector<unsigned char> data) = 0;
+  virtual std::string GetTypeURL() = 0;
+  virtual KeyMaterialType GetKeyMaterialType() = 0;
+  virtual unsigned int GetVersion() = 0;
+};
+
+class Key {
+public:
+  virtual KeyID* GetKeyID() = 0;
+  virtual KeyOperation* Operation() = 0;
+  virtual KeyData Data() = 0;
 };

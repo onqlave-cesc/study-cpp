@@ -1,7 +1,6 @@
 #pragma once
 
 #include <connection/client.h>
-#include <credential/credential.h>
 #include <requests/requests.h>
 #include <utils/hasher.h>
 
@@ -12,16 +11,19 @@ class Connection {
 };
 
 namespace conNs {
-  class Configuration {
-  public:
+  struct Credential {
+    std::string AccessKey;
+    std::string SigningKey;
+  };
+
+  struct Configuration {
     Credential Cred;
     RetrySetting Retry;
     std::string ArxUrl;
     std::string ArxID;
-
-    Configuration(std::string arxUrl, std::string arxID);
   };
-}  // namespace connection
+
+}  // namespace conNs
 
 using namespace conNs;
 
@@ -32,6 +34,6 @@ private:
   Hasher *h;
 
 public:
-  connection(Configuration configuration, Client *cl, Hasher *h);
+  connection(Configuration configuration, Hasher *h);
   int Post(std::string resource, OnqlaveRequest *body) override;
 };

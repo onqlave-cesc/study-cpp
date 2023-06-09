@@ -15,7 +15,7 @@ public:
 
 class credentialOption : public Option {
 public:
-  Credential cred;
+  credNs::Credential cred;
   void apply(keyNs::Configuration config);
 };
 
@@ -37,7 +37,7 @@ public:
   void apply(keyNs::Configuration config);
 };
 
-Option* WithCredential(Credential c);
+Option* WithCredential(credNs::Credential c);
 Option* WithRetry(RetrySetting r);
 Option* WithDebug(bool debug);
 Option* WithArx(std::string a);

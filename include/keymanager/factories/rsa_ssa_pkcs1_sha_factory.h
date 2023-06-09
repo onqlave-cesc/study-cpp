@@ -1,12 +1,13 @@
 #pragma once
 
-#include <types/types.h>
-#include <services/cprng_service.h>
+#include <keymanager/services/cprng_service.h>
+#include <keymanager/types/types.h>
 
-class rsaSSAPKCS1SHAKeyFactory {
+class rsaSSAPKCS1SHAKeyFactory : public WrappingKeyFactory {
 public:
-  CPRNGService *randomService;
+  CPRNGService* randomService;
 
-  rsaSSAPKCS1SHAKeyFactory(CPRNGService *randomService_);
-}
+  rsaSSAPKCS1SHAKeyFactory(CPRNGService* randomService_);
 
+  Unwrapping* Primative(WrappingKeyOperation* operation);
+};

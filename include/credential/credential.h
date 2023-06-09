@@ -2,12 +2,13 @@
 
 #include <fmt/core.h>
 
-class Credential {
-public:
-  std::string AccessKey;
-  std::string SigningKey;
-  std::string SecretKey;
+namespace credNs {
+  class Credential {
+  public:
+    std::string AccessKey;
+    std::string SigningKey;
+    std::string SecretKey;
 
-  void Valid();
-};
-
+    void Valid();
+  };
+}  // namespace credNs
