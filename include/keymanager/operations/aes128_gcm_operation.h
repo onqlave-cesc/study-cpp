@@ -1,6 +1,6 @@
 #pragma once
 
-#include <types/types.h>
+#include <keymanager/types/types.h>
 
 class AesGcmKeyFormat : public KeyFormat {
 public:
@@ -8,4 +8,4 @@ public:
   unsigned int Version
 
   unsigned int Size();
-}
+};
