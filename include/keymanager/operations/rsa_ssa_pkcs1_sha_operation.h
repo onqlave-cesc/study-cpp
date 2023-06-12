@@ -1,6 +1,6 @@
 #pragma once
 
-#include <types/types.h>
+#include <keymanager/types/types.h>
 
 class RsaSsaPkcs1KeyFormat : public KeyFormat {
 public:
@@ -8,7 +8,7 @@ public:
   HashType Hash;
 
   unsigned int Size();
-}
+};
 
 class rsaSSAPKCS1SHA2562048KeyOperation : public WrappingKeyOperation {
 public:
@@ -17,6 +17,6 @@ public:
 
   rsaSSAPKCS1SHA2562048KeyOperation(WrappingKeyFactory *factory_);
 
-  KeyFormat GetFormat();
-  WrappingKeyFactory GetFactory();
-}
+  KeyFormat* GetFormat();
+  WrappingKeyFactory* GetFactory();
+};

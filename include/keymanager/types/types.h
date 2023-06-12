@@ -20,10 +20,10 @@ enum KeyMaterialType {
   KeyMaterialREMOTE
 };
 
-constexpr const char Aesgcm128[] = "aes-gcm-128";
-constexpr const char Aesgcm256[] = "aes-gcm-256";
-constexpr const char XChacha20poly1305[] = "xcha-cha-20-poly-1305";
-constexpr const char RsaSsapkcs12048sha256f4[] = "RSA_SSA_PKCS1_2048_SHA256_F4";
+const std::string Aesgcm128 = "aes-gcm-128";
+const std::string Aesgcm256 = "aes-gcm-256";
+const std::string XChacha20poly1305 = "xcha-cha-20-poly-1305";
+const std::string RsaSsapkcs12048sha256f4 = "RSA_SSA_PKCS1_2048_SHA256_F4";
 
 class Key;
 class KeyID;
@@ -33,12 +33,8 @@ class WrappingKeyFactory;
 
 class AEAD {
 public:
-  virtual std::vector<unsigned char> Encrypt(std::vector<unsigned char> plaintext,
-                                             std::vector<unsigned char> associateData)
-      = 0;
-  virtual std::vector<unsigned char> Decrypt(std::vector<unsigned char> plaintext,
-                                             std::vector<unsigned char> associateData)
-      = 0;
+  virtual std::vector<unsigned char> Encrypt(std::vector<unsigned char> plaintext, std::vector<unsigned char> associateData) = 0;
+  virtual std::vector<unsigned char> Decrypt(std::vector<unsigned char> plaintext, std::vector<unsigned char> associateData) = 0;
 };
 
 class AlogorithmDeserialiser {
@@ -59,8 +55,7 @@ public:
   virtual std::vector<unsigned char> UnwrapKey(std::vector<unsigned char> wdk,
                                                std::vector<unsigned char> epk,
                                                std::vector<unsigned char> fp,
-                                               std::vector<unsigned char> byte)
-      = 0;
+                                               std::vector<unsigned char> byte) = 0;
 };
 
 class KeyFactory {

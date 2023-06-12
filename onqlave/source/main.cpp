@@ -6,7 +6,7 @@
 #include <requests/requests.h>
 
 int main() {
-  Configuration config("arx-url", "arx-12345");
+  Configuration config{.ArxUrl = "arx-url", .ArxID = "arx-12345"};
 
   connection conn(config, new hasher);
 
@@ -22,10 +22,16 @@ int main() {
   enc.Decrypt(c, d);
 
   CPRNGService* service = new cprgnService();
-  keyNs::Configuration kConf{.Cred{.AccessKey = "", .SigningKey = "", .SecretKey = ""},
-                             .Retry{.Count = 0, .Valid = true},
-                             .ArxURL = "http://localhost:8081/tenants/id/users/uid",
-                             .Debug = false};
+  keyNs::Configuration kConf{
+      .Cred{
+          .AccessKey = "",
+          .SigningKey = "",
+          .SecretKey = ""
+      },
+      .Retry{.Count = 0},
+      .ArxURL = "http://localhost:8081/tenants/id/users/uid",
+      .Debug = false
+  };
 
   keyManager km(kConf, service);
   std::vector<unsigned char> edk;

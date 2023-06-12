@@ -8,7 +8,7 @@ public:
   virtual unsigned int GetRandomUint32() = 0;
 };
 
-class cprgnService {
+class cprgnService : public CPRNGService {
 public:
   std::vector<unsigned char> GetRandomBytes(unsigned int n);
   unsigned int GetRandomUint32();

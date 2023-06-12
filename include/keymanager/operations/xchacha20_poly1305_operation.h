@@ -1,6 +1,6 @@
 #pragma once
 
-#include <types/types.h>
+#include <keymanager/types/types.h>
 
 class XChaChaKeyFormat : public KeyFormat {
 public:
@@ -8,6 +8,6 @@ public:
   unsigned int Version
 
   unsigned int Size();
-}
+};
 
 

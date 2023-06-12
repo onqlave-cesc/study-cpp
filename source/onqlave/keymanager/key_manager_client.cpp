@@ -2,11 +2,13 @@
 #include <fmt/core.h>
 #include <keymanager/factories/rsa_ssa_pkcs1_sha_factory.h>
 #include <keymanager/key_manager_client.h>
+#include <keymanager/operations/rsa_ssa_pkcs1_sha_operation.h>
 #include <keymanager/services/cprng_service.h>
 #include <keymanager/types/types.h>
 #include <utils/hasher.h>
 
 #include <map>
+#include <tuple>
 
 keyManager::keyManager(keyNs::Configuration config_, CPRNGService* randomService) {
   hasher* h = new hasher();
@@ -18,8 +20,8 @@ keyManager::keyManager(keyNs::Configuration config_, CPRNGService* randomService
 
   rsaSSAPKCS1SHAKeyFactory* factory = new rsaSSAPKCS1SHAKeyFactory(randomService);
   std::map<std::string, WrappingKeyOperation*> operations_;
-  operations_.insert(
-      std::make_pair<RsaSsapkcs12048sha256f4, new rsaSSAPKCS1SHA2562048KeyOperation(factory)>);
+  rsaSSAPKCS1SHA2562048KeyOperation* keyOp = new rsaSSAPKCS1SHA2562048KeyOperation(factory);
+  operations_.insert({RsaSsapkcs12048sha256f4, keyOp});
 
   conn = httpClient;
   config = config_;
@@ -28,17 +30,17 @@ keyManager::keyManager(keyNs::Configuration config_, CPRNGService* randomService
 
 std::tuple<std::vector<unsigned char>, std::vector<unsigned char>, std::string>
 keyManager::FetchEncryptionKey() {
-  fmt::print("keyManager::FetchEncryptionKey");
+  fmt::print("keyManager::FetchEncryptionKey\n");
 
   std::vector<unsigned char> edk;
   std::vector<unsigned char> dk;
   std::string algorithm = "";
 
-  return std::make_tuple<edk, dk, algorithm>;
+  return std::make_tuple(edk, dk, algorithm);
 }
 
 std::vector<unsigned char> keyManager::FetchDecryptionKey(std::vector<unsigned char> edk) {
-  fmt::print("keyManager::FetchDecryptionKey");
+  fmt::print("keyManager::FetchDecryptionKey\n");
   std::vector<unsigned char> dk;
 
   return dk;
