@@ -12,7 +12,7 @@
 
 keyManager::keyManager(keyNs::Configuration config_, CPRNGService* randomService) {
   hasher* h = new hasher();
-  std::size_t index = config_.ArxURL.rfind("/");
+  std::size_t index = config_.ArxURL.rfind('/');
   conNs::Credential cred{config_.Cred.AccessKey, config_.Cred.SigningKey};
   conNs::Configuration connConfig{cred, config_.Retry, config_.ArxURL.substr(0, index),
                                   config_.ArxURL.substr(index)};
