@@ -39,7 +39,7 @@ public:
 
 class AlogorithmDeserialiser {
 public:
-  virtual int Deserialise(std::vector<unsigned char> buffer) = 0;
+//  virtual int Deserialise(std::vector<unsigned char> buffer) = 0;
   virtual std::vector<unsigned char> Key() = 0;
   virtual std::vector<unsigned char> Version() = 0;
   virtual std::string Algorithm() = 0;
@@ -52,29 +52,29 @@ public:
 
 class Unwrapping {
 public:
-  virtual std::vector<unsigned char> UnwrapKey(std::vector<unsigned char> wdk,
-                                               std::vector<unsigned char> epk,
-                                               std::vector<unsigned char> fp,
-                                               std::vector<unsigned char> byte) = 0;
+//  virtual std::vector<unsigned char> UnwrapKey(std::vector<unsigned char> wdk,
+//                                               std::vector<unsigned char> epk,
+//                                               std::vector<unsigned char> fp,
+//                                               std::vector<unsigned char> byte) = 0;
 };
 
 class KeyFactory {
 public:
-  virtual Key* NewKey(KeyOperation* operation) = 0;
-  virtual Key* NewKeyFromData(KeyOperation* operation, std::vector<unsigned char> keyData) = 0;
-  virtual AEAD* Primitive(Key* key) = 0;
+//  virtual Key* NewKey(KeyOperation* operation) = 0;
+//  virtual Key* NewKeyFromData(KeyOperation* operation, std::vector<unsigned char> keyData) = 0;
+//  virtual AEAD* Primitive(Key* key) = 0;
 };
 
 class KeyOperation {
 public:
-  virtual KeyFormat* GetFormat() = 0;
-  virtual KeyFactory* GetFactory() = 0;
+//  virtual KeyFormat* GetFormat() = 0;
+//  virtual KeyFactory* GetFactory() = 0;
 };
 
 class WrappingKeyOperation {
 public:
-  virtual KeyFormat* GetFormat() = 0;
-  virtual WrappingKeyFactory* GetFactory() = 0;
+//  virtual KeyFormat* GetFormat() = 0;
+//  virtual WrappingKeyFactory* GetFactory() = 0;
 };
 
 class WrappingKeyFactory {
@@ -84,16 +84,16 @@ public:
 
 class KeyData {
 public:
-  virtual std::vector<unsigned char> GetValue() = 0;
-  virtual void FromValue(std::vector<unsigned char> data) = 0;
-  virtual std::string GetTypeURL() = 0;
-  virtual KeyMaterialType GetKeyMaterialType() = 0;
+//  virtual std::vector<unsigned char> GetValue() = 0;
+//  virtual void FromValue(std::vector<unsigned char> data) = 0;
+//  virtual std::string GetTypeURL() = 0;
+//  virtual KeyMaterialType GetKeyMaterialType() = 0;
   virtual unsigned int GetVersion() = 0;
 };
 
 class Key {
 public:
-  virtual KeyID* GetKeyID() = 0;
-  virtual KeyOperation* Operation() = 0;
-  virtual KeyData Data() = 0;
+//  virtual KeyID* GetKeyID() = 0;
+//  virtual KeyOperation* Operation() = 0;
+//  virtual KeyData Data() = 0;
 };
