@@ -36,6 +36,9 @@ keyManager::FetchEncryptionKey() {
   std::vector<unsigned char> dk;
   std::string algorithm = "";
 
+  OnqlaveRequest* body = new EncryptionOpenRequest();
+  conn->Post("http://localhost:8083", body);
+
   return std::make_tuple(edk, dk, algorithm);
 }
 

@@ -7,6 +7,7 @@
 #include <string>
 
 class Connection {
+public:
   virtual int Post(std::string resource, OnqlaveRequest *body) = 0;
 };
 

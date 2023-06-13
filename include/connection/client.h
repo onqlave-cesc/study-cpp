@@ -6,12 +6,13 @@
 #include <string>
 
 class Client {
-  virtual int Post(std::string resource, const OnqlaveRequest& body, std::map<std::string, std::string> headers) = 0;
+public:
+  virtual int Post(std::string resource, OnqlaveRequest* body, std::map<std::string, std::string> headers) = 0;
 };
 
 class client : public Client {
   public:
-    int Post(std::string resource, const OnqlaveRequest& body, std::map<std::string, std::string> headers);
+    int Post(std::string resource, OnqlaveRequest* body, std::map<std::string, std::string> headers);
 };
 
 class RetrySetting {
