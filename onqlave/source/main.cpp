@@ -5,36 +5,42 @@
 #include <keymanager/services/cprng_service.h>
 #include <requests/requests.h>
 
+#include <vector>
+#include <fmt/core.h>
+
 int main() {
-  Configuration config{.ArxUrl = "arx-url", .ArxID = "arx-12345"};
+  Configuration config{.ArxUrl = "tenants/arx/arx-12345", .ArxID = "arx-12345"};
 
   connection conn(config, new hasher);
 
   int res = conn.Post("arx", new EncryptionOpenRequest);
   fmt::print("result: {}\n", res);
 
-  Encryption enc;
+  std::vector<Option*> opts;
+
+  Option* retryOpt = WithRetry(RetrySetting{
+      .Count=2,
+      .WaitTime=400,
+      .MaxWaitTime=200
+  });
+  Option* arxOpt = WithArx("tenants/arx/arx-12345");
+  Option* debugOpt = WithDebug(true);
+  Option* credOpt = WithCredential(credNs::Credential{
+      .AccessKey="accKey",
+      .SigningKey="signKey",
+      .SecretKey="secKey"
+  });
+
+  opts.push_back(retryOpt);
+  opts.push_back(arxOpt);
+  opts.push_back(debugOpt);
+  opts.push_back(credOpt);
+
+  Encryption enc = Encryption(opts);
 
   std::vector<unsigned char> c;
   std::vector<unsigned char> d;
 
   enc.Encrypt(c, d);
   enc.Decrypt(c, d);
-
-  CPRNGService* service = new cprgnService();
-  keyNs::Configuration kConf{
-      .Cred{
-          .AccessKey = "",
-          .SigningKey = "",
-          .SecretKey = ""
-      },
-      .Retry{.Count = 0},
-      .ArxURL = "http://localhost:8081/tenants/id/users/uid",
-      .Debug = false
-  };
-
-  keyManager km(kConf, service);
-  std::vector<unsigned char> edk;
-  km.FetchDecryptionKey(edk);
-  km.FetchEncryptionKey();
 }

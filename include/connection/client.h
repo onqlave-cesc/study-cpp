@@ -17,6 +17,8 @@ class client : public Client {
 class RetrySetting {
 public:
   int Count;
+  int WaitTime;
+  int MaxWaitTime;
 
   void Valid();
 };

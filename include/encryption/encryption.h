@@ -7,6 +7,7 @@
 #include <map>
 #include <string>
 #include <tuple>
+#include <vector>
 
 class Encryption {
 private:
@@ -17,6 +18,8 @@ private:
   AEAD *initDecryptOperation(std::string operation, AlogorithmDeserialiser *algo);
 
 public:
+  Encryption(std::vector<Option*> opts);
+
   std::vector<unsigned char> Encrypt(std::vector<unsigned char> plainData, std::vector<unsigned char> associateData);
 
   std::vector<unsigned char> Decrypt(std::vector<unsigned char> cipherData, std::vector<unsigned char> associateData);
