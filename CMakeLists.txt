@@ -36,6 +36,12 @@ CPMAddPackage(
 #========== Add dependency =================
 CPMAddPackage("gh:jedisct1/libsodium#1.0.18")
 
+ if(libsodium_ADDED)
+     add_library(libsodium INTERFACE IMPORTED)
+     configure_file(${libsodium_SOURCE_DIR}/src/libsodium/include/sodium/version.h.in ${libsodium_SOURCE_DIR}/src/libsodium/include/sodium/version.h)
+     target_include_directories(libsodium INTERFACE ${libsodium_SOURCE_DIR}/src/libsodium/include)
+ endif()
+
 CPMAddPackage(
         NAME openssl-cmake
         GITHUB_REPOSITORY janbar/openssl-cmake
@@ -68,7 +74,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 11)
 target_compile_options(${PROJECT_NAME} PUBLIC "$<$<COMPILE_LANG_AND_ID:CXX,MSVC>:/permissive->")
 
 # Link dependencies
-target_link_libraries(${PROJECT_NAME} PRIVATE fmt::fmt libcurl)
+target_link_libraries(${PROJECT_NAME} PRIVATE fmt::fmt libcurl libsodium)
 
 target_include_directories(
   ${PROJECT_NAME} PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
