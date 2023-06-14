@@ -50,6 +50,8 @@ if (openssl-cmake_ADDED)
 endif()
 CPMAddPackage("gh:curl/curl#curl-8_1_2")
 
+CPMAddPackage("gh:nlohmann/json#3.2.0")
+
 # ---- Add source files ----
 
 # Note: globbing sources is considered bad practice as CMake's generators may not detect new files
@@ -68,7 +70,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 11)
 target_compile_options(${PROJECT_NAME} PUBLIC "$<$<COMPILE_LANG_AND_ID:CXX,MSVC>:/permissive->")
 
 # Link dependencies
-target_link_libraries(${PROJECT_NAME} PRIVATE fmt::fmt libcurl)
+target_link_libraries(${PROJECT_NAME} PRIVATE fmt::fmt libcurl nlohmann_json::nlohmann_json)
 
 target_include_directories(
   ${PROJECT_NAME} PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
