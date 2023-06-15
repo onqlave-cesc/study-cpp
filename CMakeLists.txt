@@ -50,7 +50,7 @@ if (openssl-cmake_ADDED)
 endif()
 CPMAddPackage("gh:curl/curl#curl-8_1_2")
 
-CPMAddPackage("gh:nlohmann/json#3.2.0")
+CPMAddPackage("gh:nlohmann/json@3.4.0")
 
 # ---- Add source files ----
 
