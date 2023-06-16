@@ -37,7 +37,7 @@ keyManager::FetchEncryptionKey() {
   std::string algorithm = "";
 
   OnqlaveRequest* body = new EncryptionOpenRequest();
-  conn->Post("http://localhost:8090/dataplane/administration/arxs", body);
+  conn->Post(ENCRYPT_RESOURCE_URL, body);
 
   return std::make_tuple(edk, dk, algorithm);
 }
