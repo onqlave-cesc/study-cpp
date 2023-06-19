@@ -9,6 +9,7 @@
 
 #include <map>
 #include <tuple>
+#include <iostream>
 
 keyManager::keyManager(keyNs::Configuration config_, CPRNGService* randomService) {
   hasher* h = new hasher();
@@ -36,8 +37,14 @@ keyManager::FetchEncryptionKey() {
   std::vector<unsigned char> dk;
   std::string algorithm = "";
 
-  OnqlaveRequest* body = new EncryptionOpenRequest();
-  conn->Post(ENCRYPT_RESOURCE_URL, body);
+  EncryptionOpenRequest body;
+  std::tuple<std::string, int> res = conn->Post(ENCRYPT_RESOURCE_URL, &body);
+
+  if (std::get<1>(res) != 0) {
+    std::cout << "======================ERROR:" << std::get<0>(res) << std::endl;
+    return {};
+  }
+  std::cout << "======================RESPONSE: " << std::get<0>(res) << std::endl;
 
   return std::make_tuple(edk, dk, algorithm);
 }

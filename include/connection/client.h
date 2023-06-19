@@ -4,15 +4,16 @@
 
 #include <map>
 #include <string>
+#include <tuple>
 
 class Client {
 public:
-  virtual int Post(std::string resource, OnqlaveRequest* body, std::map<std::string, std::string> headers) = 0;
+  virtual std::tuple<std::string, int> Post(std::string resource, OnqlaveRequest* body, std::map<std::string, std::string> headers) = 0;
 };
 
 class client : public Client {
   public:
-    int Post(std::string resource, OnqlaveRequest* body, std::map<std::string, std::string> headers);
+    std::tuple<std::string, int> Post(std::string resource, OnqlaveRequest* body, std::map<std::string, std::string> headers);
 };
 
 class RetrySetting {
