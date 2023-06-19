@@ -45,6 +45,5 @@ keyManager::FetchEncryptionKey() {
 std::vector<unsigned char> keyManager::FetchDecryptionKey(std::vector<unsigned char> edk) {
   fmt::print("keyManager::FetchDecryptionKey\n");
   std::vector<unsigned char> dk;
-
   return dk;
 }

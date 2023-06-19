@@ -13,11 +13,7 @@ int main() {
 
   connection conn(config, new hasher);
 
-  int res = conn.Post("arx", new EncryptionOpenRequest);
-  fmt::print("result: {}\n", res);
-
   std::vector<Option*> opts;
-
   Option* retryOpt = WithRetry(RetrySetting{
       .Count=2,
       .WaitTime=400,
@@ -42,5 +38,5 @@ int main() {
   std::vector<unsigned char> d;
 
   enc.Encrypt(c, d);
-  enc.Decrypt(c, d);
+//  enc.Decrypt(c, d);
 }
