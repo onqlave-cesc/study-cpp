@@ -1,7 +1,7 @@
 #include <connection/connection.h>
 #include <requests/requests.h>
 #include <fmt/format.h>
-#include <iostream>
+#include <ctime>
 
 using namespace conNs;
 
@@ -29,7 +29,9 @@ const std::string placeholderHost = "https://gcp.community.serverless.au.dp0.onq
 const std::string arxID = "cluster--bNhVy8osXRrYtvXXbQlAW";
 const std::string apiKey = "onq.elVTArNDjuLynflKi2PQEjMnsdyGAJiC";
 
-int connection::Post(std::string resource, OnqlaveRequest *body) {
+std::tuple<std::string, int> connection::Post(std::string resource, OnqlaveRequest *body) {
+  std::time_t currentTime = std::time(nullptr);
+
   std::map<std::string, std::string> headers;
   headers.insert({OnqlaveContent, Onqlave_Content});
   headers.insert({OnqlaveAPIKey, apiKey});
@@ -37,18 +39,13 @@ int connection::Post(std::string resource, OnqlaveRequest *body) {
   headers.insert({OnqlaveHost, placeholderHost});
   headers.insert({OnqlaveAgent, ServerType});
   headers.insert({OnqlaveVersion, Version});
-  headers.insert({OnqlaveRequestTime, Onqlave_Request_Time});
+  headers.insert({OnqlaveRequestTime, std::to_string(currentTime)});
   headers.insert({OnqlaveContentLength, Onqlave_Content_Length});
   headers.insert({OnqlaveDigest, DigestTemplate});
   headers.insert({OnqlaveSignature, SignatureTemplate});
 
-  for (auto  const &pair: headers){
-    std::cout << pair.first << ": " << pair.second << std::endl;
-  }
-
   std::string urlString = fmt::format("{}/{}", placeholderHost, resource);
-  cl->Post(urlString, body, headers);
-  return 0;
+  return cl->Post(urlString, body, headers);
 }
 
 connection::connection(Configuration configuration, Hasher *h): configuration(configuration), h(h) {

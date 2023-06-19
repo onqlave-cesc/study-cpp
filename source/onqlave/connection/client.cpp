@@ -26,17 +26,20 @@ size_t WriteCallback(void* contents, size_t size, size_t nmemb, std::string* res
   return totalSize;
 }
 
-int client::Post(std::string resource, OnqlaveRequest* body, std::map<std::string, std::string> headers) {
+std::tuple<std::string, int> client::Post(std::string resource, OnqlaveRequest* body, std::map<std::string, std::string> headers) {
   CURL* curl= curl_easy_init();
-
-
-  std::string bodystr = reqData.dump();
+  json reqData = json::parse(R"({})");
+  if (const auto *decryptionBody = dynamic_cast<const DecryptionOpenRequest*>(body)) {
+    reqData["edk"] = decryptionBody->EDK;
+  }
+  std::string bodyStr = reqData.dump();
   std::string responseData;
-  long http_code = 0;
+  long httpCode = 0;
+  int responseCode = 0;
   if (curl) {
     curl_easy_setopt(curl, CURLOPT_URL, resource.c_str());
     curl_easy_setopt(curl, CURLOPT_POST, 1L);
-    curl_easy_setopt(curl, CURLOPT_POSTFIELDS, bodystr.c_str());
+    curl_easy_setopt(curl, CURLOPT_POSTFIELDS, bodyStr.c_str());
 
     struct curl_slist* cHeaders = nullptr;
     for (const auto& header: headers) {
@@ -50,33 +53,15 @@ int client::Post(std::string resource, OnqlaveRequest* body, std::map<std::strin
 
     CURLcode res = curl_easy_perform(curl);
     if (res != CURLE_OK) {
+      responseCode = 1;
       std::cerr << "Failed to perform request: " << curl_easy_strerror(res) << std::endl;
     }
-    curl_easy_getinfo (curl, CURLINFO_RESPONSE_CODE, &http_code);
-    json resDataJson = json::parse(responseData);
-    std::cout << "===========Parse Data Response============"<< std::endl << resDataJson<< std::endl;
-    if (http_code != HTTP_CODE_SUCCESS) {
-      OQLResponse oqlResponse;
-      oqlResponse.error.status = resDataJson["error"]["status"];
-      oqlResponse.error.message = resDataJson["error"]["message"];
-      std::cout << "Data parse Json 2: " << oqlResponse.error.message << std::endl;
-//      OnqlaveEncryptFailedResponse responseFailed;
-//      responseFailed.status = resDataJson["erorr"]["status"];
-//      responseFailed.message = resDataJson["erorr"]["message"];
-//      std::cout << "Message: " << responseFailed.message << std::endl;
-    }else{
-
+    curl_easy_getinfo (curl, CURLINFO_RESPONSE_CODE, &httpCode);
+    if (httpCode != HTTP_CODE_SUCCESS) {
+      responseCode = 1;
     }
-
-
-
-
-
-    // TODO: need to review nlohmann::json resData = nlohmann::json::parse(responseData);
-//    auto arxData = resData["data"].template get<reqData::ArxRequest>();
-
    curl_easy_cleanup(curl);
   }
-  return 0;
+  return std::make_tuple(responseData, responseCode);
 }
 

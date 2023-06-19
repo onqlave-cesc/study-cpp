@@ -4,11 +4,12 @@
 #include <requests/requests.h>
 #include <utils/hasher.h>
 
+#include <tuple>
 #include <string>
 
 class Connection {
 public:
-  virtual int Post(std::string resource, OnqlaveRequest *body) = 0;
+  virtual std::tuple<std::string, int> Post(std::string resource, OnqlaveRequest *body) = 0;
 };
 
 namespace conNs {
@@ -36,5 +37,5 @@ private:
 
 public:
   connection(Configuration configuration, Hasher *h);
-  int Post(std::string resource, OnqlaveRequest *body) override;
+  std::tuple<std::string, int> Post(std::string resource, OnqlaveRequest *body) override;
 };
