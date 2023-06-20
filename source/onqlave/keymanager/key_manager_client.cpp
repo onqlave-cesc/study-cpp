@@ -6,10 +6,15 @@
 #include <keymanager/services/cprng_service.h>
 #include <keymanager/types/types.h>
 #include <utils/hasher.h>
+#include <contracts/responses/responses.h>
 
-#include <map>
-#include <tuple>
 #include <iostream>
+#include <map>
+#include <nlohmann/json.hpp>
+#include <tuple>
+
+
+using json = nlohmann::json;
 
 keyManager::keyManager(keyNs::Configuration config_, CPRNGService* randomService) {
   hasher* h = new hasher();
@@ -44,7 +49,8 @@ keyManager::FetchEncryptionKey() {
     std::cout << "======================ERROR:" << std::get<0>(res) << std::endl;
     return {};
   }
-  std::cout << "======================RESPONSE: " << std::get<0>(res) << std::endl;
+  auto j = json::parse(std::get<0>(res));
+  auto response = j.template get<EncryptionOpenResponse>();
 
   return std::make_tuple(edk, dk, algorithm);
 }
