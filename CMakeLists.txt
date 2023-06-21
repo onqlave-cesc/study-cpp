@@ -34,7 +34,11 @@ CPMAddPackage(
 )
 
 #========== Add dependency =================
-CPMAddPackage("gh:jedisct1/libsodium#1.0.18")
+CPMAddPackage(
+        NAME libsodium
+        GITHUB_REPOSITORY onqlave-cesc/libsodium
+        GIT_TAG stable
+)
 
 CPMAddPackage(
         NAME openssl-cmake
@@ -68,9 +72,8 @@ set_target_properties(${PROJECT_NAME} PROPERTIES CXX_STANDARD 11)
 
 # being a cross-platform target, we enforce standards conformance on MSVC
 target_compile_options(${PROJECT_NAME} PUBLIC "$<$<COMPILE_LANG_AND_ID:CXX,MSVC>:/permissive->")
-
 # Link dependencies
-target_link_libraries(${PROJECT_NAME} PRIVATE fmt::fmt libcurl nlohmann_json::nlohmann_json)
+target_link_libraries(${PROJECT_NAME} PRIVATE fmt::fmt libcurl libsodium nlohmann_json::nlohmann_json)
 
 target_include_directories(
   ${PROJECT_NAME} PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
