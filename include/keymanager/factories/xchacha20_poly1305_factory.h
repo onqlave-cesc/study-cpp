@@ -11,6 +11,6 @@ public:
   xChaCha20Poly1305KeyFactory(IDService* idService_, CPRNGService* randomService_);
 
   Key* NewKey(KeyOperation* operation);
-  Key* NewKeyFromData(KeyOperation* operation, std::vector<unsigned char> keyData);
+  Key* NewKeyFromData(KeyOperation* operation, std::string keyData);
   AEAD* Primitive(Key* key);
 };

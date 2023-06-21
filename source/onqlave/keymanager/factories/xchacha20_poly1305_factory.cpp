@@ -9,7 +9,7 @@ Key* xChaCha20Poly1305KeyFactory::NewKey(KeyOperation *operation) {
   return nullptr ;
 }
 
-Key* xChaCha20Poly1305KeyFactory::NewKeyFromData(KeyOperation *operation, std::vector<unsigned char> keyData) {
+Key* xChaCha20Poly1305KeyFactory::NewKeyFromData(KeyOperation *operation, std::string keyData) {
   return nullptr ;
 }
 

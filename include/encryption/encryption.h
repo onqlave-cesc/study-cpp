@@ -14,8 +14,8 @@ private:
   KeyManager *keyManager;
   std::map<std::string, KeyOperation *> operations;
 
-  std::tuple<AlogorithmDeserialiser *, AEAD *> initEncryptOperation(std::string operation);
-  AEAD *initDecryptOperation(std::string operation, AlogorithmDeserialiser *algo);
+  std::tuple<AlgorithmDeserialiser *, AEAD *> initEncryptOperation(std::string operation);
+  AEAD *initDecryptOperation(std::string operation, AlgorithmDeserialiser *algo);
 
 public:
   Encryption(std::vector<Option*> opts);

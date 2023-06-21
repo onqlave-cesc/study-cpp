@@ -34,23 +34,28 @@ keyManager::keyManager(keyNs::Configuration config_, CPRNGService* randomService
   operations = operations_;
 }
 
-std::tuple<std::vector<unsigned char>, std::vector<unsigned char>, std::string>
-keyManager::FetchEncryptionKey() {
-  fmt::print("keyManager::FetchEncryptionKey\n");
-
-  std::vector<unsigned char> edk;
-  std::vector<unsigned char> dk;
-  std::string algorithm = "";
+std::tuple<std::string, std::string, std::string> keyManager::FetchEncryptionKey() {
+  std::string operation = "FetchDecryptionKey";
+  fmt::print("keyManager::{}\n", operation);
 
   EncryptionOpenRequest body;
   std::tuple<std::string, int> res = conn->Post(ENCRYPT_RESOURCE_URL, &body);
-
   if (std::get<1>(res) != 0) {
     std::cout << "======================ERROR:" << std::get<0>(res) << std::endl;
+    auto j = json::parse(std::get<0>(res));
+    auto response = j.template get<BaseError>();
     return {};
   }
+
   auto j = json::parse(std::get<0>(res));
   auto response = j.template get<EncryptionOpenResponse>();
+  auto edk = response.dk.edk;
+  auto wdk = response.dk.wdk;
+  auto epk = response.wk.epk;
+  auto fp = response.wk.keyFingerprint;
+  auto wrappingAlgorithm = response.securityModel.wrappingAlgorithm;
+  auto algorithm = response.securityModel.algorithm;
+  auto dk = unwrapKey(wrappingAlgorithm, operation, wdk, epk, fp, "fake_pw");
 
   return std::make_tuple(edk, dk, algorithm);
 }
@@ -58,5 +63,19 @@ keyManager::FetchEncryptionKey() {
 std::vector<unsigned char> keyManager::FetchDecryptionKey(std::vector<unsigned char> edk) {
   fmt::print("keyManager::FetchDecryptionKey\n");
   std::vector<unsigned char> dk;
+  return dk;
+}
+
+std::string keyManager::unwrapKey(std::string wrappingAlgorithm,
+                                  std::string operation,
+                                  std::string wdk,
+                                  std::string epk,
+                                  std::string fp,
+                                  std::string password)
+{
+  auto wrappingOperation = operations[wrappingAlgorithm];
+  auto factory = wrappingOperation->GetFactory();
+  auto primitive = factory->Primative(wrappingOperation);
+  auto dk = primitive->UnwrapKey(wdk, epk, fp, password);
   return dk;
 }
