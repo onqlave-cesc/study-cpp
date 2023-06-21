@@ -25,23 +25,29 @@ const std::string Aesgcm256 = "aes-gcm-256";
 const std::string XChacha20poly1305 = "xcha-cha-20-poly-1305";
 const std::string RsaSsapkcs12048sha256f4 = "RSA_SSA_PKCS1_2048_SHA256_F4";
 
+typedef int KeyID;
+
 class Key;
-class KeyID;
 class KeyData;
 class KeyOperation;
 class WrappingKeyFactory;
 
 class AEAD {
 public:
-  virtual std::vector<unsigned char> Encrypt(std::vector<unsigned char> plaintext, std::vector<unsigned char> associateData) = 0;
-  virtual std::vector<unsigned char> Decrypt(std::vector<unsigned char> plaintext, std::vector<unsigned char> associateData) = 0;
+  virtual std::string Encrypt(std::string plaintext, std::string associateData) = 0;
+  virtual std::string Decrypt(std::string ciphertext, std::string associateData) = 0;
 };
 
-class AlogorithmDeserialiser {
+class AlgorithmSerialiser {
 public:
-//  virtual int Deserialise(std::vector<unsigned char> buffer) = 0;
-  virtual std::vector<unsigned char> Key() = 0;
-  virtual std::vector<unsigned char> Version() = 0;
+  virtual std::string Serialise() = 0;
+};
+
+class AlgorithmDeserialiser {
+public:
+  virtual int Deserialise(std::string buffer) = 0;
+  virtual std::string Key() = 0;
+  virtual std::string Version() = 0;
   virtual std::string Algorithm() = 0;
 };
 
@@ -52,29 +58,29 @@ public:
 
 class Unwrapping {
 public:
-//  virtual std::vector<unsigned char> UnwrapKey(std::vector<unsigned char> wdk,
-//                                               std::vector<unsigned char> epk,
-//                                               std::vector<unsigned char> fp,
-//                                               std::vector<unsigned char> byte) = 0;
+  virtual std::string UnwrapKey(std::string wdk,
+                                std::string epk,
+                                std::string fp,
+                                std::string byte) = 0;
 };
 
 class KeyFactory {
 public:
-//  virtual Key* NewKey(KeyOperation* operation) = 0;
-//  virtual Key* NewKeyFromData(KeyOperation* operation, std::vector<unsigned char> keyData) = 0;
-//  virtual AEAD* Primitive(Key* key) = 0;
+  virtual Key* NewKey(KeyOperation* operation) = 0;
+  virtual Key* NewKeyFromData(KeyOperation* operation, std::string keyData) = 0;
+  virtual AEAD* Primitive(Key* key) = 0;
 };
 
 class KeyOperation {
 public:
-//  virtual KeyFormat* GetFormat() = 0;
-//  virtual KeyFactory* GetFactory() = 0;
+  virtual KeyFormat* GetFormat() = 0;
+  virtual KeyFactory* GetFactory() = 0;
 };
 
 class WrappingKeyOperation {
 public:
-//  virtual KeyFormat* GetFormat() = 0;
-//  virtual WrappingKeyFactory* GetFactory() = 0;
+  virtual KeyFormat* GetFormat() = 0;
+  virtual WrappingKeyFactory* GetFactory() = 0;
 };
 
 class WrappingKeyFactory {
@@ -84,16 +90,16 @@ public:
 
 class KeyData {
 public:
-//  virtual std::vector<unsigned char> GetValue() = 0;
-//  virtual void FromValue(std::vector<unsigned char> data) = 0;
-//  virtual std::string GetTypeURL() = 0;
-//  virtual KeyMaterialType GetKeyMaterialType() = 0;
+  virtual std::string GetValue() = 0;
+  virtual void FromValue(std::string data) = 0;
+  virtual std::string GetTypeURL() = 0;
+  virtual KeyMaterialType GetKeyMaterialType() = 0;
   virtual unsigned int GetVersion() = 0;
 };
 
 class Key {
 public:
-//  virtual KeyID* GetKeyID() = 0;
-//  virtual KeyOperation* Operation() = 0;
-//  virtual KeyData Data() = 0;
+  virtual KeyID* GetKeyID() = 0;
+  virtual KeyOperation* Operation() = 0;
+  virtual KeyData* Data() = 0;
 };

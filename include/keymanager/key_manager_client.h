@@ -24,7 +24,7 @@ namespace keyNs {
 
 class KeyManager {
 public:
-  virtual std::tuple<std::vector<unsigned char>, std::vector<unsigned char>, std::string> FetchEncryptionKey() = 0;
+  virtual std::tuple<std::string, std::string, std::string> FetchEncryptionKey() = 0;
   virtual std::vector<unsigned char> FetchDecryptionKey(std::vector<unsigned char> edk) = 0;
 };
 
@@ -34,16 +34,17 @@ private:
   keyNs::Configuration config;
   std::map<std::string, WrappingKeyOperation *> operations;
 
-  std::vector<unsigned char> unwrapKey(std::string wrappingAlgorithm, std::string operation,
-                                       std::vector<unsigned char> wdk,
-                                       std::vector<unsigned char> epk,
-                                       std::vector<unsigned char> fp,
-                                       std::vector<unsigned char> password);
+  std::string unwrapKey(std::string wrappingAlgorithm,
+                                                std::string operation,
+                                                std::string wdk,
+                                                std::string epk,
+                                                std::string fp,
+                                                std::string password);
 
 public:
   keyManager(keyNs::Configuration config, CPRNGService *randomService);
 
-  std::tuple<std::vector<unsigned char>, std::vector<unsigned char>, std::string> FetchEncryptionKey();
+  std::tuple<std::string, std::string, std::string> FetchEncryptionKey();
 
   std::vector<unsigned char> FetchDecryptionKey(std::vector<unsigned char> edk);
 };

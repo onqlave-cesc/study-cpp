@@ -6,12 +6,12 @@
 
 class EncryptedStreamProcessor {
 public:
-  virtual AlogorithmDeserialiser ReadHeader() = 0;
+  virtual AlgorithmDeserialiser ReadHeader() = 0;
   virtual std::vector<unsigned char> ReadPacket() = 0;
 };
 
 class encryptedStreamProcessor : public EncryptedStreamProcessor {
 public:
-  AlogorithmDeserialiser ReadHeader();
+  AlgorithmDeserialiser ReadHeader();
   std::vector<unsigned char> ReadPacket();
 };

@@ -38,15 +38,15 @@ Encryption::Encryption(std::vector<Option*> opts) {
   operations = ops;
 }
 
-std::tuple<AlogorithmDeserialiser*, AEAD*> Encryption::initEncryptOperation(std::string operation) {
+std::tuple<AlgorithmDeserialiser*, AEAD*> Encryption::initEncryptOperation(std::string operation) {
   fmt::print("Encryption::initEncryptOperation\n");
-  AlogorithmDeserialiser* algo;
+  AlgorithmDeserialiser* algo;
 
   AEAD* aead;
   return std::make_tuple(algo, aead);
 }
 
-AEAD* Encryption::initDecryptOperation(std::string operation, AlogorithmDeserialiser* algo) {
+AEAD* Encryption::initDecryptOperation(std::string operation, AlgorithmDeserialiser* algo) {
   fmt::print("Encryption::initDecryptOperation\n");
 
   AEAD* aead;
