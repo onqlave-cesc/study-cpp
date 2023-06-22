@@ -34,8 +34,8 @@ class WrappingKeyFactory;
 
 class AEAD {
 public:
-  virtual std::string Encrypt(std::string plaintext, std::string associateData) = 0;
-  virtual std::string Decrypt(std::string ciphertext, std::string associateData) = 0;
+  virtual unsigned char* Encrypt(const unsigned char* plaintext, const unsigned char* associateData, unsigned char& ciphertext, unsigned long long& ciphertext_len) = 0;
+  virtual unsigned char* Decrypt(const unsigned char&  ciphertext, const unsigned char*  associateData) = 0;
 };
 
 class AlgorithmSerialiser {
@@ -47,7 +47,7 @@ class AlgorithmDeserialiser {
 public:
   virtual int Deserialise(std::string buffer) = 0;
   virtual std::string Key() = 0;
-  virtual std::string Version() = 0;
+  virtual int Version() = 0;
   virtual std::string Algorithm() = 0;
 };
 

@@ -9,10 +9,12 @@
 #include <keymanager/operations/aes128_gcm_operation.h>
 #include <keymanager/operations/aes256_gcm_operation.h>
 #include <keymanager/operations/xchacha20_poly1305_operation.h>
+#include <keymanager/types/algorithm.h>
 
 #include <map>
 #include <tuple>
 #include <vector>
+#include <iostream>
 
 Encryption::Encryption(std::vector<Option*> opts) {
   keyNs::Configuration options{.Cred = {}, .Retry = {}, .ArxURL = INVALID_ARX};
@@ -40,10 +42,18 @@ Encryption::Encryption(std::vector<Option*> opts) {
 
 std::tuple<AlgorithmDeserialiser*, AEAD*> Encryption::initEncryptOperation(std::string operation) {
   fmt::print("Encryption::initEncryptOperation\n");
-  AlgorithmDeserialiser* algo;
+  auto encTup = keyManager->FetchEncryptionKey();
+  std::string edk;
+  std::string dk;
+  std::string algoStr;
+  std::tie(edk, dk, algoStr) = encTup;
+  auto ops = operations[algoStr];
+  auto factory = ops->GetFactory();
+  auto key = factory->NewKeyFromData(ops, dk);
+  auto primitive = factory->Primitive(key);
+  algorithm algo = algorithm();
 
-  AEAD* aead;
-  return std::make_tuple(algo, aead);
+  return std::make_tuple(&algo, primitive);
 }
 
 AEAD* Encryption::initDecryptOperation(std::string operation, AlgorithmDeserialiser* algo) {
@@ -55,9 +65,12 @@ AEAD* Encryption::initDecryptOperation(std::string operation, AlgorithmDeseriali
 
 std::vector<unsigned char> Encryption::Encrypt(std::vector<unsigned char> plainData,
                                                std::vector<unsigned char> associateData) {
-  auto tup = Encryption::initEncryptOperation("Encrypt");
+  auto initTup = Encryption::initEncryptOperation("Encrypt");
   fmt::print("Encryption::Encrypt\n");
-  keyManager->FetchEncryptionKey();
+  auto primitive = std::get<1>(initTup);
+//  auto cipherData = primitive->Encrypt(reinterpret_cast<const unsigned char*>("plainData"), reinterpret_cast<const unsigned char*>("associatedata"));
+//  auto cipherStr = std::string(reinterpret_cast<const char*>(cipherData));
+//  std::cout << "=============CIPHER STRING: " << cipherStr << std::endl;
   std::vector<unsigned char> byte = {};
   return byte;
 }

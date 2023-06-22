@@ -11,10 +11,10 @@ AESGCMAEAD::AESGCMAEAD(Key *key_, CPRNGService* randomService_) : randomService(
   key = keyValue;
 }
 
-std::string AESGCMAEAD::Encrypt(std::string plaintext, std::string associateData) {
-  return "";
+unsigned char* AESGCMAEAD::Encrypt(const unsigned char* plaintext, const unsigned char* associateData, unsigned char& ciphertext, unsigned long long& ciphertext_len) {
+  return nullptr;
 }
 
-std::string AESGCMAEAD::Decrypt(std::string ciphertext, std::string associateData) {
-  return "";
+unsigned char* AESGCMAEAD::Decrypt(const unsigned char& ciphertext, const unsigned char* associateData) {
+  return nullptr;
 }

@@ -15,6 +15,6 @@ private:
 public:
   XChaCha20Poly1305AEAD(Key* key_, CPRNGService* randomService_);
 
-  std::string Encrypt(std::string plaintext, std::string associateData) override;
-  std::string Decrypt(std::string ciphertext, std::string associateData) override;
+  unsigned char* Encrypt(const unsigned char* plaintext, const unsigned char* associateData, unsigned char& ciphertext, unsigned long long& ciphertext_len) override;
+  unsigned char* Decrypt(const unsigned char& ciphertext, const unsigned char* associateData) override;
 };
